@@ -49,6 +49,28 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+#Add repository ODBC and Install the Microsoft ODBC driver for SQL Server
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && apt-get install -y unixodbc-dev \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+    && ACCEPT_EULA=Y apt-get install -y mssql-tools \
+    && apt-get install -y gcc musl-dev make
+
+# Install the PHP drivers for Microsoft SQL Server
+
+RUN curl -O https://pear.php.net/go-pear.phar \
+     && php go-pear.phar
+
+RUN pecl channel-update pecl.php.net \
+    && pecl install sqlsrv pdo_sqlsrv \
+    && printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.3/mods-available/sqlsrv.ini \
+    && printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.3/mods-available/pdo_sqlsrv.ini \
+    && phpenmod -v 8.3 sqlsrv pdo_sqlsrv \
+    && pecl clear-cache \
+    && rm -rf /tmp/* /var/tmp/*
+
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.3
 
 RUN groupadd --force -g $WWWGROUP sail

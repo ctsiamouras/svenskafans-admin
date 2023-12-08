@@ -3,14 +3,25 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+//class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements HasName
 {
     use HasApiTokens, HasFactory, Notifiable;
+//    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+//    public function canAccessPanel(Panel $panel): bool
+//    {
+//        return true;
+//    }
+
+    protected $table = 'AdminUser';
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +29,24 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'FirstName',
+        'LastName',
+        'Email',
+        'NicName',
+        'UserName',
         'password',
+        'Phone',
+        'LastLoggin',
+        'LastPWDChange',
+        'FailedLoggin',
+        'Locked',
+        'FK_AdminUserTypeID',
+        'HasPhoto',
+        'ShowEmail',
+        'TwitterName',
+        'ResourceVersion',
+        'name',
+        'remember_token',
     ];
 
     /**
@@ -31,6 +57,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'LastLoggin',
+        'LastPWDChange',
+        'FailedLoggin',
     ];
 
     /**
@@ -42,4 +71,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getFilamentName(): string
+    {
+        return "{$this->FirstName} {$this->LastName}";
+    }
+
+    /**
+     * Many to One association for Site
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo(UserRole::class, 'FK_AdminUserTypeID', 'id');
+    }
+
+    /**
+     * Many to Many association for Site
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'user_team');
+    }
 }

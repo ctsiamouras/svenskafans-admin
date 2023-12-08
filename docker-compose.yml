@@ -1,11 +1,11 @@
 services:
     laravel.test:
         build:
-            context: ./docker/8.2
+            context: ./docker/8.3
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-8.2/app
+        image: sail-8.3/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -51,6 +51,22 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+    mssql:
+        image: mcr.microsoft.com/mssql/server
+        ports:
+            - '${FORWARD_DB_PORT:-1433}:1433'
+        environment:
+            MSSQL_SA_PASSWORD : "${DB_PASSWORD}"
+            ACCEPT_EULA: "Y"
+#            MSSQL_PID: "${DB_USERNAME}"
+#            MSSQL_PID: "Express"
+            MSSQL_PID: "${DB_PID}"
+#            PHP_EXTENSIONS: pdo_sqlsrv,sqlsrv
+        volumes:
+            - 'sail-mssql:/var/opt/mssql'
+            - './docker/mssql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - sail
     redis:
         image: 'redis:alpine'
         ports:
@@ -105,6 +121,8 @@ networks:
         driver: bridge
 volumes:
     sail-mysql:
+        driver: local
+    sail-mssql:
         driver: local
     sail-redis:
         driver: local
