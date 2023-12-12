@@ -29,14 +29,30 @@ class MigrateData extends Command
         ]
     ];
 
-    public const COLUMNS_WITH_DEFAULT_VALUE = [
-        'last_login' => null,
-        'failed_login' => false,
-        'locked' => false,
-        'has_photo' => false,
-        'show_email' => false,
+//    public const BOOLEAN_COLUMNS = [
+//        'failed_login',
+//        'locked',
+//        'has_photo',
+//        'show_email',
+//    ];
+
+    public const BOOLEAN_COLUMNS = [
+        'Locked',
+        'HasPhoto',
+        'ShowEmail',
     ];
 
+    public const NULL_COLUMNS_TO_IGNORE_RECORD = [
+        self::TABLE_ADMINUSER => ['Password'],
+    ];
+
+    public const PRIMARY_KEY_PER_TABLE = [
+        self::TABLE_ADMINUSER => 'AdminUserId',
+    ];
+
+    public const UNIQUE_COLUMNS_PER_TABLE = [
+        self::TABLE_ADMINUSER => ['UserName'],
+    ];
 
     public const MAPPING_PER_TABLE = [
         self::TABLE_ADMINUSER => [
@@ -63,8 +79,6 @@ class MigrateData extends Command
         ]
     ];
 
-
-
     /**
      * The name and signature of the console command.
      *
@@ -88,261 +102,84 @@ class MigrateData extends Command
         $bar = $this->output->createProgressBar(1);
         $bar->start();
 
-
         $success = 0;
         $errors = 0;
-//        foreach ($parcels as $parcel) {
-            try {
-//                $lol = $this->test('lol');
+        $offset = 0;
+        $limit = 1000;
 
-                $connectionName =  env('DB_CONNECTION2');
-                $productionTable = self::TABLE_ADMINUSER;
-                $productionColumns = implode(',', array_keys(self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::COLUMNS]));
+        try {
+            $connectionName =  env('DB_CONNECTION2');
+            $productionTable = self::TABLE_ADMINUSER;
+            $localTable = self::MAPPING_PER_TABLE[$productionTable][self::LOCAL_TABLE_NAME];
+            $primaryKey = self::PRIMARY_KEY_PER_TABLE[$productionTable];
+            $productionColumns = implode(',', array_keys(self::MAPPING_PER_TABLE[$productionTable][self::COLUMNS]));
 
-                $sqlQuery = "SELECT TOP 1000 {$productionColumns} FROM {$productionTable}";
+            $sqlQuery = "SELECT {$productionColumns} FROM {$productionTable} ORDER BY {$primaryKey} OFFSET {$offset} ROWS FETCH NEXT {$limit} ROWS ONLY";
 
-                $results = DB::connection($connectionName)->select($sqlQuery);
+            $this->info("\n\n{$sqlQuery}");
 
-                $dataToInsert = [];
+            while ($results = DB::connection($connectionName)->select($sqlQuery)) {
                 foreach ($results as $result) {
+                    $data = [];
+                    $uniqueData = [];
+
                     foreach ($result as $column => $value) {
+                        if (in_array($column, self::NULL_COLUMNS_TO_IGNORE_RECORD[$productionTable]) && $value === null) {
+                            $data = [];
+
+                            break;
+                        }
+
+                        // set NULL value for date columns with 1900-01-01 value
                         if (str_contains($value, '1900-01-01')) {
                             $value = null;
                         }
 
-                        $data[self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::COLUMNS][$column]] = $value;
+                        // cast values of boolean fields to boolean
+                        if (in_array($column, self::BOOLEAN_COLUMNS)) {
+                            $value = (boolean) $value;
+                        }
+
+                        // add values per column
+                        if (in_array($column, self::UNIQUE_COLUMNS_PER_TABLE[$productionTable])) {
+                            $uniqueData[self::MAPPING_PER_TABLE[$productionTable][self::COLUMNS][$column]] = $value;
+                        } else {
+                            $data[self::MAPPING_PER_TABLE[$productionTable][self::COLUMNS][$column]] = $value;
+                        }
                     }
 
-                    $dataToInsert[] = $data;
+                    if ($data) {
+                        if ($data['id'] == 3631) {
+                            dd($data);
+                        }
+
+                        DB::table($localTable)->updateOrInsert(
+                            $uniqueData,
+                            $data
+                        );
+                    }
                 }
 
-//                dd($dataToInsert);
+//                User::insert($dataToInsert);
 
+                $offset += $limit;
+                $sqlQuery = "SELECT {$productionColumns} FROM {$productionTable} ORDER BY {$primaryKey} OFFSET {$offset} ROWS FETCH NEXT {$limit} ROWS ONLY";
 
-
-                User::insert($dataToInsert);
-
-
-
-
-
-
-
-
-//                dd($results);
-
-
-//                foreach ($results as $result) {
-
-                    $values = [];
-//                    foreach ($result as $value) {
-//                        $values[] = $value;
-//                    }
-
-//                    $values = implode(',', $values);
-
-//                    DB::connection('sqlsrv')->insert('insert into users (' . implode(',', self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::LOCAL_COLUMNS]) . ')
-//                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [1, 'Marc']);
-
-
-
-
-
-
-
-//                    DB::connection('sqlsrv')->unprepared('SET IDENTITY_INSERT user_roles ON');
-
-//                    DB::connection('sqlsrv')->insert('insert into users (' . implode(',', self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::LOCAL_COLUMNS]) . ')
-//                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', $values);
-
-
-
-//                    $data = [
-//                        [
-//                            'first_name' => 'Christos',
-//                            'last_name' => 'Tsam',
-//                            'email' => 'test@test.com',
-//    //                'nickname',
-//                            'username' => 'testUsername',
-//                            'password' => 'test1234',
-//                        ],
-//                        [
-//                            'first_name' => 'Christos2',
-//                            'last_name' => 'Tsam2',
-//                            'email' => 'test2@test.com',
-//    //                'nickname',
-//                            'username' => 'test2Username',
-//                            'password' => 'test1234',
-//                        ],
-//                    ];
-//
-//                    User::insert([
-//                        [
-//                            'id' => 5,
-//                            'first_name' => 'Christos',
-//                            'last_name' => 'Börjesson',
-//                            'email' => 'test@test.com',
-//                            //                'nickname',
-//                            'username' => 'testUsername',
-//                            'password' => 'test1234',
-//                        ],
-//                        [
-//                            'id' => 6,
-//                            'first_name' => 'Djurgården',
-//                            'last_name' => 'Börjesson2',
-//                            'email' => 'test2@test.com',
-//                            //                'nickname',
-//                            'username' => 'test2Username',
-//                            'password' => 'test1234',
-//                        ],
-//                    ]);
-
-
-
-
-
-
-//                    DB::connection('sqlsrv')->insert('insert into users (' . implode(',', self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::LOCAL_COLUMNS]) . ')
-//                    values (' . implode(',', $values) . ')');
-
-
-//                    $test = ['christos', 'Börjesson', 'test@test.gr', 'username', 'test1234', 'nameTest'];
-
-//                    DB::connection('sqlsrv')->insert('insert into users (' . implode(',', self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::LOCAL_COLUMNS]) . ')
-//                    values (?, ?, ?, ?, ?)', $test);
-
-//                    DB::connection('sqlsrv')->insert('insert into users (' . implode(',', self::MAPPING_PER_TABLE[self::TABLE_ADMINUSER][self::LOCAL_COLUMNS]) . ')
-//                    values (' . implode(',', $test) . ')');
-
-
-//                    DB::connection('sqlsrv')->unprepared('SET IDENTITY_INSERT user_roles OFF');
-
-
-//                    dd($result);
-//                }
-
-
-
-
-
-
-
-                // Your raw SQL query
-//                $sqlQuery = 'USE CY_Content; SELECT TOP 1 * FROM AdminUsers;';
-//                $sqlQuery = 'SELECT TOP 1 * FROM AdminUser';
-//                $sqlQuery = 'SELECT * FROM AdminUsers';
-//                $sqlQuery = 'SHOW TABLES';
-
-//                $results = DB::connection($connectionName)->select($sqlQuery);
-
-
-//                $tables = DB::connection($connectionName)->select("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'");
-
-
-//                dd($tables);
-
-
-//                DB::select('SHOW TABLES');
-
-
-                // Execute the query on the specified connection
-
-                // Process the results as needed
-//                foreach ($results as $result) {
-//
-//                    $tableColumn = 'id';
-//
-//
-//                    dd($result->$tableColumn);
-//
-//                    // Process each result
-//                }
-
-
-                ++$success;
-            } catch (\Exception $e) {
-
-                dd('Error: ' . $e->getMessage());
-
-//                $this->logger->error("Parcel {$parcel->id} failed", [$e->getMessage()]);
-                ++$errors;
+                $this->info("\n\n{$sqlQuery}");
             }
 
-            $bar->advance();
-//        }
+            ++$success;
+        } catch (\Exception $e) {
+            $this->error("\n\nError: {$e->getMessage()}");
+
+            ++$errors;
+        }
+
+        $bar->advance();
 
         $bar->finish();
 
         $this->info("\n\nSuccessful updates: {$success}");
         $this->error("Unsuccessful updates: {$errors}");
     }
-
-
-    /**
-     * Migrate
-     *
-     * @param string $parcel
-     *
-     * @return string
-     */
-    private function test(string $test): string
-    {
-
-        return $test;
-
-        // update only parcels with orgm > 3 and soil type not null
-        // or with null soil_type
-//        if ($parcel->soilProperties->orgm > static::MINIMUM_ACCEPTABLE_ORGM || null == $parcel->soilProperties->soil_type) {
-//            // start db transaction
-//            DB::beginTransaction();
-//
-//            try {
-//                // get new soil properties
-//                $soilProperties = SoilGrids::get($parcel->coordinates['lon'], $parcel->coordinates['lat']);
-//                // update parcel soil properties
-//                $parcel->soilProperties->update($soilProperties);
-//                $parcel->save();
-//            } catch (\Exception $e) {
-//                // something went wrong, rollback and throw same exception
-//                DB::rollBack();
-//
-//                throw $e;
-//            }
-//
-//            // commit database changes
-//            DB::commit();
-//        }
-    }
-
-
-    /**
-     * Migrate
-     *
-     * @param string $parcel
-     *
-     * @return array
-     */
-    private function mapping(string $test): array
-    {
-
-        $mapping = [
-            'CY_Content' => [
-                [
-                  'table_name' => '',
-                  'table_columns' => '',
-                ],
-                'AdminUser' => [
-                    'production' => [],
-                    '' => [],
-                ]
-            ]
-
-
-        ];
-
-
-
-    }
-
-
 }
