@@ -41,6 +41,6 @@ class Sport extends Model
      */
     public function sites()
     {
-        return $this->hasMany(Site::class, 'FK_SportID', 'id');
+        return $this->hasMany(Site::class, 'sport_id', 'id');
     }
 }

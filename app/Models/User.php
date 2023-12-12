@@ -13,15 +13,12 @@ use Laravel\Sanctum\HasApiTokens;
 //class User extends Authenticatable implements FilamentUser, HasName
 class User extends Authenticatable implements HasName
 {
-    use HasApiTokens, HasFactory, Notifiable;
-//    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
 //    public function canAccessPanel(Panel $panel): bool
 //    {
 //        return true;
 //    }
-
-    protected $table = 'AdminUser';
 
     /**
      * The attributes that are mass assignable.
@@ -29,22 +26,22 @@ class User extends Authenticatable implements HasName
      * @var array<int, string>
      */
     protected $fillable = [
-        'FirstName',
-        'LastName',
-        'Email',
-        'NicName',
-        'UserName',
+        'first_name',
+        'last_name',
+        'email',
+        'nickname',
+        'username',
         'password',
-        'Phone',
-        'LastLoggin',
-        'LastPWDChange',
-        'FailedLoggin',
-        'Locked',
-        'FK_AdminUserTypeID',
-        'HasPhoto',
-        'ShowEmail',
-        'TwitterName',
-        'ResourceVersion',
+        'phone',
+        'last_login',
+        'last_password_change',
+        'failed_login',
+        'locked',
+        'user_role_id',
+        'has_photo',
+        'show_email',
+        'twitter_name',
+        'resource_version',
         'name',
         'remember_token',
     ];
@@ -57,9 +54,9 @@ class User extends Authenticatable implements HasName
     protected $hidden = [
         'password',
         'remember_token',
-        'LastLoggin',
-        'LastPWDChange',
-        'FailedLoggin',
+        'last_login',
+        'last_password_change',
+        'failed_login',
     ];
 
     /**
@@ -68,7 +65,6 @@ class User extends Authenticatable implements HasName
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
@@ -84,7 +80,7 @@ class User extends Authenticatable implements HasName
      */
     public function role()
     {
-        return $this->belongsTo(UserRole::class, 'FK_AdminUserTypeID', 'id');
+        return $this->belongsTo(UserRole::class, 'user_role_id', 'id');
     }
 
     /**

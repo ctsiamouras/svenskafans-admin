@@ -23,12 +23,12 @@ class League extends Model
     protected $fillable = [
         'name',
         'site_id',
+        'tournament_id',
         'show_in_mobile',
-        'league_table_dividers',
-        'league_url',
+        'table_dividers',
+        'url',
         'live_score_sort_order',
         'collection_page_intro_text',
-        'tournament_id',
         'resource_version',
     ];
 
@@ -50,7 +50,7 @@ class League extends Model
      */
     public function teams()
     {
-        return $this->hasMany(Team::class, 'FK_LeagueID', 'id');
+        return $this->hasMany(Team::class, 'league_id', 'id');
     }
 
     /**

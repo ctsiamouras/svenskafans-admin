@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    protected $table = 'Message';
-
-    public $timestamps = false;
-
     /**
      * The attributes that should be cast.
      *
@@ -55,6 +51,6 @@ class Message extends Model
      */
     public function team()
     {
-        return $this->belongsTo(Team::class, 'FK_TeamID', 'id');
+        return $this->belongsTo(Team::class, 'team_id', 'id');
     }
 }

@@ -22,7 +22,7 @@ class UserRole extends Model
      * @var array
      */
     protected $fillable = [
-        'role'
+        'name'
     ];
 
     /**
@@ -32,6 +32,6 @@ class UserRole extends Model
      */
     public function users()
     {
-        return $this->hasMany(User::class, 'FK_AdminUserTypeID', 'id');
+        return $this->hasMany(User::class, 'user_role_id', 'id');
     }
 }

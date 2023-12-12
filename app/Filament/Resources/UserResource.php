@@ -49,15 +49,15 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('FirstName')
+                TextInput::make('first_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.first_name'))
                     ->required(),
-                TextInput::make('LastName')
+                TextInput::make('last_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.last_name'))
                     ->required(),
-                TextInput::make('NicName')
+                TextInput::make('nickname')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.nickname')),
-                TextInput::make('UserName')
+                TextInput::make('username')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.username'))
 //                    ->unique(ignoreRecord: true)
                     ->required(),
@@ -66,16 +66,16 @@ class UserResource extends Resource
                     ->hiddenOn(EditUser::class)
                     ->password()
                     ->required(),
-                TextInput::make('Phone')
+                TextInput::make('phone')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.phone')),
-                TextInput::make('Email')
+                TextInput::make('email')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.email'))
                     ->email()
 //                    ->unique(ignoreRecord: true)
                     ->required(),
-                TextInput::make('TwitterName')
+                TextInput::make('twitter_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.twitter_name')),
-                Select::make('FK_AdminUserTypeID')
+                Select::make('user_role_id')
                     ->options(self::userRoleOptions())
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.user_role'))
                     ->required(),
@@ -88,19 +88,19 @@ class UserResource extends Resource
             ->deferLoading()
             ->paginated(PaginationConstants::DEFAULT_LIST_PAGINATION)
             ->columns([
-                TextColumn::make('FirstName')
+                TextColumn::make('first_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.first_name'))
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('LastName')
+                TextColumn::make('last_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.last_name'))
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('UserName')
+                TextColumn::make('username')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.username'))
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('Email')
+                TextColumn::make('email')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.email'))
                     ->searchable()
                     ->sortable(),
@@ -112,7 +112,7 @@ class UserResource extends Resource
                             ->label('Site')
                             ->searchable()
                             ->placeholder('')
-                            ->options(Site::orderBy('SiteName')->get()->pluck('SiteName', 'id'))
+                            ->options(Site::orderBy('name')->get()->pluck('name', 'id'))
                             ->afterStateUpdated(function (callable $set) {
                                 $set('team_select', null);
                             }),
@@ -123,7 +123,7 @@ class UserResource extends Resource
                             ->options(function (callable $get) {
                                 $site = Site::find($get('site_select'));
 
-                                return $site ? $site->teams->pluck('TeamName', 'id') : null;
+                                return $site ? $site->teams->pluck('name', 'id') : null;
                             }),
                     ])
                     ->indicateUsing(function (array $data): ?string {

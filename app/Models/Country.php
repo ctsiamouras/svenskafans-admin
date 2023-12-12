@@ -42,6 +42,6 @@ class Country extends Model
      */
     public function sites()
     {
-        return $this->hasMany(Site::class, 'FK_CountryID', 'id');
+        return $this->hasMany(Site::class, 'country_id', 'id');
     }
 }

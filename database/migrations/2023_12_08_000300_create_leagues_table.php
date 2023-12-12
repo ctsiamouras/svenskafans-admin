@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('leagues', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique()->collation('Finnish_Swedish_CI_AS');
-            $table->unsignedInteger('site_id')->nullable();
+            $table->string('name', 50)->unique()->index();
+            $table->unsignedBigInteger('site_id')->nullable()->index();
+            $table->unsignedBigInteger('tournament_id')->nullable()->index();
             $table->boolean('show_in_mobile')->default(true);
-            $table->string('league_table_dividers', 50)->nullable()->collation('Finnish_Swedish_CI_AS');
-            $table->string('league_url', 100)->nullable()->collation('Finnish_Swedish_CI_AS');
+            $table->string('table_dividers', 50)->nullable();
+            $table->string('url', 100)->nullable();
             $table->integer('live_score_sort_order');
-            $table->text('collection_page_intro_text')->nullable()->collation('Finnish_Swedish_CI_AS');
-            $table->unsignedBigInteger('tournament_id')->nullable();
-            $table->unsignedInteger('resource_version')->default(0);
+            $table->text('collection_page_intro_text')->nullable();
+            $table->integer('resource_version')->default(0);
             $table->timestamps();
 
-            $table->foreign('site_id')->references('id')->on('Site')->nullOnDelete();
+            $table->foreign('site_id')->references('id')->on('sites')->nullOnDelete();
 //            $table->foreign('tournament_id')->references('id')->on('tournaments')->nullOnDelete();
         });
     }

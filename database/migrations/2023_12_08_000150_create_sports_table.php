@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('Team', function(Blueprint $table) {
-            $table->renameColumn('TeamID', 'id');
+        Schema::create('sports', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 50)->unique()->index();
+            $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::table('Team', function(Blueprint $table) {
-            $table->renameColumn('id', 'TeamID');
-        });
+        Schema::dropIfExists('sports');
     }
 };

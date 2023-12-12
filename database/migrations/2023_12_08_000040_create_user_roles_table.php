@@ -22,7 +22,6 @@ return new class extends Migration
 
         // Insert admin user roles
         $today = Carbon::now();
-        DB::unprepared('SET IDENTITY_INSERT user_roles ON');
         DB::table('user_roles')->insert([
             [
                 'id' => 1,
@@ -49,7 +48,6 @@ return new class extends Migration
                 'updated_at' => $today,
             ],
         ]);
-        DB::unprepared('SET IDENTITY_INSERT user_roles OFF');
     }
 
     public function down()

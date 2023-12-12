@@ -14,7 +14,7 @@ class EditSite extends EditRecord
     {
         return [
             Actions\DeleteAction::make()
-                ->hidden(fn ($record) => $record->IsVisible),
+                ->hidden(fn ($record) => $record->show_in_lists),
         ];
     }
 }

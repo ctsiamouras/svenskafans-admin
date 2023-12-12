@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Team extends Model
 {
-//    use SoftDeletes;
-
-    protected $table = 'Team';
-
-    public $timestamps = false;
+    use SoftDeletes;
 
     /**
      * The attributes that should be cast.
@@ -28,18 +24,16 @@ class Team extends Model
      * @var array
      */
     protected $fillable = [
-        'TeamName',
-        'TeamNameLong',
-        'TeamNameShort',
-        'FK_SiteID',
-        'FK_LeagueID',
-        'HasTeamPage',
-        'Created',
-        'BrandName',
-        'MsMessage',
-        'AdTomaParameter',
-        'PlayersTeamImageId',
-        'MapPlayers',
+        'name',
+        'long_name',
+        'short_name',
+        'site_id',
+        'league_id',
+        'has_team_page',
+        'brand_name',
+        'ms_message',
+        'players_team_image_id',
+        'map_players',
     ];
 
     /**
@@ -49,7 +43,7 @@ class Team extends Model
      */
     public function site()
     {
-        return $this->belongsTo(Site::class, 'FK_SiteID', 'id');
+        return $this->belongsTo(Site::class, 'site_id', 'id');
     }
 
     /**
@@ -59,7 +53,7 @@ class Team extends Model
      */
     public function league()
     {
-        return $this->belongsTo(League::class, 'FK_LeagueID', 'id');
+        return $this->belongsTo(League::class, 'league_id', 'id');
     }
 
     /**

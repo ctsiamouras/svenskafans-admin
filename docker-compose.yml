@@ -51,22 +51,22 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
-    mssql:
-        image: mcr.microsoft.com/mssql/server
-        ports:
-            - '${FORWARD_DB_PORT:-1433}:1433'
-        environment:
-            MSSQL_SA_PASSWORD : "${DB_PASSWORD}"
-            ACCEPT_EULA: "Y"
-#            MSSQL_PID: "${DB_USERNAME}"
-#            MSSQL_PID: "Express"
-            MSSQL_PID: "${DB_PID}"
-#            PHP_EXTENSIONS: pdo_sqlsrv,sqlsrv
-        volumes:
-            - 'sail-mssql:/var/opt/mssql'
-            - './docker/mssql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
-        networks:
-            - sail
+#    mssql:
+#        image: mcr.microsoft.com/mssql/server
+#        ports:
+#            - '${FORWARD_DB_PORT:-1433}:1433'
+#        environment:
+#            MSSQL_SA_PASSWORD : "${DB_PASSWORD}"
+#            ACCEPT_EULA: "Y"
+##            MSSQL_PID: "${DB_USERNAME}"
+##            MSSQL_PID: "Express"
+#            MSSQL_PID: "${DB_PID}"
+##            PHP_EXTENSIONS: pdo_sqlsrv,sqlsrv
+#        volumes:
+#            - 'sail-mssql:/var/opt/mssql'
+#            - './docker/mssql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+#        networks:
+#            - sail
     redis:
         image: 'redis:alpine'
         ports:

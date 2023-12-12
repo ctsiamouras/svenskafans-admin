@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Site extends Model
 {
-    protected $table = 'Site';
-
-    public $timestamps = false;
-
     /**
      * The attributes that should be cast.
      *
@@ -25,25 +21,25 @@ class Site extends Model
      * @var array
      */
     protected $fillable = [
-        'SiteName',
-        'SiteURL',
-        'IsVisible',
-        'MenuColor',
-        'HeaderColor',
-        'META_Keywords',
-        'META_Description',
-        'UseInMember',
-        'TextColor',
-        'FirstGameDate',
-        'ShowInMobile',
-        'ShowInLeftMenu',
-        'Title',
-        'LeagueLeapsOverTwoYears',
-        'SortOrder',
-        'FK_SportID',
-        'FK_CountryID',
-        'HasTournament',
-        'ResourceVersion',
+        'name',
+        'url',
+        'show_in_lists',
+        'menu_color',
+        'header_color',
+        'meta_keywords',
+        'meta_description',
+        'use_in_member',
+        'text_color',
+        'first_game_date',
+        'show_in_mobile',
+        'show_in_left_menu',
+        'title',
+        'league_leaps_over_two_years',
+        'sort_order',
+        'sport_id',
+        'country_id',
+        'has_tournament',
+        'resource_version',
     ];
 
     /**
@@ -53,7 +49,7 @@ class Site extends Model
      */
     public function teams()
     {
-        return $this->hasMany(Team::class, 'FK_SiteID', 'id');
+        return $this->hasMany(Team::class, 'site_id', 'id');
     }
 
     /**
@@ -73,7 +69,7 @@ class Site extends Model
      */
     public function country()
     {
-        return $this->belongsTo(Country::class, 'FK_CountryID', 'id');
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 
     /**
@@ -83,6 +79,6 @@ class Site extends Model
      */
     public function sport()
     {
-        return $this->belongsTo(Sport::class, 'FK_SportID', 'id');
+        return $this->belongsTo(Sport::class, 'sport_id', 'id');
     }
 }

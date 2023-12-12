@@ -46,24 +46,24 @@ class TeamResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('FK_SiteID')
+                Select::make('site_id')
                     ->options(self::siteOptions())
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.site'))
                     ->required(),
-                Select::make('FK_LeagueID')
+                Select::make('league_id')
                     ->options(self::leagueOptions())
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.league'))
                     ->required(),
-                TextInput::make('TeamName')
+                TextInput::make('name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.name'))
                     ->required(),
-                TextInput::make('TeamNameLong')
+                TextInput::make('long_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.long_name')),
-                TextInput::make('TeamNameShort')
+                TextInput::make('short_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.short_name')),
-                TextInput::make('BrandName')
+                TextInput::make('brand_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.brand_name')),
-                Checkbox::make('HasTeamPage')
+                Checkbox::make('has_team_page')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.has_team_page')),
             ]);
     }
@@ -73,25 +73,25 @@ class TeamResource extends Resource
         return $table
             ->deferLoading()
             ->paginated(PaginationConstants::DEFAULT_LIST_PAGINATION)
-            ->defaultSort('TeamName')
+            ->defaultSort('name')
             ->columns([
                 TextColumn::make('id')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.table.id')),
-                TextColumn::make('TeamName')
+                TextColumn::make('name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.table.name'))
                     ->searchable(),
-                TextColumn::make('site.SiteName')
+                TextColumn::make('site.name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.table.site')),
                 TextColumn::make('league.name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.table.league')),
             ])
             ->filters([
-                SelectFilter::make('FK_SiteID')
+                SelectFilter::make('site_id')
                     ->label('Site')
                     ->searchable()
                     ->preload()
                     ->options(function () {
-                        return Site::orderBy('SiteName')->get()->pluck('SiteName', 'id');
+                        return Site::orderBy('name')->get()->pluck('name', 'id');
                     })
             ])
             ->actions([
@@ -121,7 +121,7 @@ class TeamResource extends Resource
     }
 
     private static function siteOptions(): array {
-        return Site::all()->pluck('SiteName', 'id')->toArray();
+        return Site::all()->pluck('name', 'id')->toArray();
     }
 
     private static function leagueOptions(): array {

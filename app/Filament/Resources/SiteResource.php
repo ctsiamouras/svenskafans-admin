@@ -48,46 +48,46 @@ class SiteResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('SiteName')
+                TextInput::make('name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.name'))
                     ->required(),
-                TextInput::make('Title')
+                TextInput::make('title')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.title'))
                     ->required(),
-                Textarea::make('META_Description')
+                Textarea::make('meta_description')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.meta_description'))
                     ->rows(4)
                     ->required(),
-                TextInput::make('SiteURL')
+                TextInput::make('url')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.url'))
                     ->required(),
-                Select::make('FK_CountryID')
+                Select::make('country_id')
                     ->options(self::countryOptions())
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.country'))
                     ->required(),
-                Select::make('FK_SportID')
+                Select::make('sport_id')
                     ->options(self::sportOptions())
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.sport'))
                     ->required(),
-                ColorPicker::make('TextColor')
+                ColorPicker::make('text_color')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.text_color'))
                     ->required(),
-                ColorPicker::make('HeaderColor')
+                ColorPicker::make('header_color')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.header_color'))
                     ->required(),
-                ColorPicker::make('MenuColor')
+                ColorPicker::make('menu_color')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.menu_color'))
                     ->required(),
-                Checkbox::make('IsVisible')
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.is_visible'))
+                Checkbox::make('show_in_lists')
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.show_in_lists'))
                     ->columnStart(1),
-                Checkbox::make('UseInMember')
+                Checkbox::make('use_in_member')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.use_in_member')),
-                Checkbox::make('ShowInMobile')
+                Checkbox::make('show_in_mobile')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.show_in_mobile')),
-                Checkbox::make('ShowInLeftMenu')
+                Checkbox::make('show_in_left_menu')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.show_in_left_menu')),
-                Checkbox::make('LeagueLeapsOverTwoYears')
+                Checkbox::make('league_leaps_over_two_years')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.league_leaps_over_two_years')),
             ]);
     }
@@ -97,32 +97,32 @@ class SiteResource extends Resource
         return $table
             ->deferLoading()
             ->paginated(PaginationConstants::DEFAULT_LIST_PAGINATION)
-            ->reorderable('SortOrder')
-            ->defaultSort('SortOrder')
+            ->reorderable('sort_order')
+            ->defaultSort('sort_order')
             ->columns([
                 TextColumn::make('id')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.id'))
                     ->sortable(),
-                TextColumn::make('SiteName')
+                TextColumn::make('name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.name'))
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('SiteURL')
+                TextColumn::make('url')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.url'))
                     ->sortable(),
-                CheckboxColumn::make('IsVisible')
+                CheckboxColumn::make('show_in_lists')
                     ->disabled()
                     ->alignCenter()
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.is_visible')),
-                CheckboxColumn::make('UseInMember')
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.show_in_lists')),
+                CheckboxColumn::make('use_in_member')
                     ->disabled()
                     ->alignCenter()
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.use_in_member')),
-                CheckboxColumn::make('ShowInMobile')
+                CheckboxColumn::make('show_in_mobile')
                     ->disabled()
                     ->alignCenter()
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.show_in_mobile')),
-                CheckboxColumn::make('ShowInLeftMenu')
+                CheckboxColumn::make('show_in_left_menu')
                     ->disabled()
                     ->alignCenter()
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.show_in_left_menu')),
@@ -132,7 +132,7 @@ class SiteResource extends Resource
                 TextColumn::make('sport.name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.sport'))
                     ->sortable(),
-                CheckboxColumn::make('HasTournament')
+                CheckboxColumn::make('has_tournament')
                     ->disabled()
                     ->alignCenter()
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.table.has_tournament')),
@@ -142,7 +142,7 @@ class SiteResource extends Resource
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make()
-                    ->hidden(fn ($record) => $record->IsVisible),
+                    ->hidden(fn ($record) => $record->show_in_lists),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
