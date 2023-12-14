@@ -93,7 +93,7 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
-        'sqlsrv2' => [
+        'sqlsrv_production' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL2'),
             'host' => env('DB_HOST2', 'localhost'),

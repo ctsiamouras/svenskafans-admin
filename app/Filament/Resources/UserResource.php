@@ -128,7 +128,7 @@ class UserResource extends Resource
                     ])
                     ->indicateUsing(function (array $data): ?string {
                         if ($data['team_select']) {
-                            return 'Team: ' . Team::findOrFail($data['team_select'])->TeamName;
+                            return 'Team: ' . Team::findOrFail($data['team_select'])->name;
                         }
 
                         return null;
@@ -136,7 +136,7 @@ class UserResource extends Resource
                     ->query(fn (Builder $query, array $data): Builder => $query
                         ->when($data['team_select'], function (Builder $q) use ($data) {
                             return $q->whereHas('teams', function ($q) use ($data) {
-                                $q->where('team.id', $data['team_select']);
+                                $q->where('teams.id', $data['team_select']);
                             });
                         })
                     ),

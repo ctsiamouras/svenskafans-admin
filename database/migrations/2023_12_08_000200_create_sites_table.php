@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50)->index();
-            $table->string('url', 50);
-            $table->integer('show_in_lists')->default(false);
+            $table->string('url', 50)->unique();
+            $table->boolean('show_in_lists')->default(false);
             $table->string('menu_color', 50)->nullable();
             $table->string('header_color', 50)->nullable();
             $table->string('meta_keywords', 50)->nullable();

@@ -70,7 +70,7 @@ class User extends Authenticatable implements HasName
 
     public function getFilamentName(): string
     {
-        return "{$this->FirstName} {$this->LastName}";
+        return "{$this->first_name} {$this->last_name}";
     }
 
     /**

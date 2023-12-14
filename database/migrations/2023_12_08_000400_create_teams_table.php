@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->index();
+            $table->string('name', 50)->unique()->index();
             $table->string('long_name', 50)->nullable();
             $table->string('short_name', 50)->nullable();
             $table->unsignedBigInteger('site_id')->nullable()->index();
