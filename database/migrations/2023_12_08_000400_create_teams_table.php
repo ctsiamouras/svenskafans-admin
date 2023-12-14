@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique()->index();
-            $table->string('long_name', 50)->nullable();
-            $table->string('short_name', 50)->nullable();
+            $table->string('name', 150)->unique()->index();
+            $table->string('long_name')->nullable();
+            $table->string('short_name', 150)->nullable();
             $table->unsignedBigInteger('site_id')->nullable()->index();
             $table->unsignedBigInteger('league_id')->nullable()->index();
             $table->boolean('has_team_page')->default(false);
-            $table->string('brand_name', 50)->nullable();
+            $table->string('brand_name', 150)->nullable();
             $table->string('ms_message', 1024)->default('');
             $table->unsignedBigInteger('players_team_image_id')->default(0)->nullable()->index();
             $table->boolean('map_players')->default(false);

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('leagues', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->index();
+            $table->string('name', 150)->index();
             $table->unsignedBigInteger('site_id')->nullable()->index();
             $table->unsignedBigInteger('tournament_id')->nullable()->index();
             $table->boolean('show_in_mobile')->default(true);
             $table->string('table_dividers', 50)->nullable();
-            $table->string('url', 100)->unique()->nullable();
+            $table->string('url')->unique()->nullable();
             $table->integer('live_score_sort_order');
             $table->text('collection_page_intro_text')->nullable();
             $table->integer('resource_version')->default(0);
