@@ -17,7 +17,7 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
+            'name' => fake()->unique()->word(),
             'long_name' => fake()->words(2, true),
             'site_id' => SiteFactory::new()->create(),
             'league_id' => LeagueFactory::new()->create(),
