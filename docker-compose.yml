@@ -1,5 +1,5 @@
 services:
-    laravel.test:
+    svenskafans:
         build:
             context: ./docker/8.3
             dockerfile: Dockerfile
@@ -22,12 +22,12 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
-            - redis
-            - meilisearch
-            - mailpit
-            - selenium
-    mysql:
+            - svenska-mysql
+            - svenska-redis
+            - svenska-meilisearch
+            - svenska-selenium
+        restart: unless-stopped
+    svenska-mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -51,6 +51,7 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+        restart: unless-stopped
 #    mssql:
 #        image: mcr.microsoft.com/mssql/server
 #        ports:
@@ -67,7 +68,7 @@ services:
 #            - './docker/mssql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
 #        networks:
 #            - sail
-    redis:
+    svenska-redis:
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
@@ -82,7 +83,8 @@ services:
                 - ping
             retries: 3
             timeout: 5s
-    meilisearch:
+        restart: unless-stopped
+    svenska-meilisearch:
         image: 'getmeili/meilisearch:latest'
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
@@ -101,14 +103,8 @@ services:
                 - 'http://localhost:7700/health'
             retries: 3
             timeout: 5s
-    mailpit:
-        image: 'axllent/mailpit:latest'
-        ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
-        networks:
-            - sail
-    selenium:
+        restart: unless-stopped
+    svenska-selenium:
         image: selenium/standalone-chrome
         extra_hosts:
             - 'host.docker.internal:host-gateway'
@@ -116,6 +112,7 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+        restart: unless-stopped
 networks:
     sail:
         driver: bridge
