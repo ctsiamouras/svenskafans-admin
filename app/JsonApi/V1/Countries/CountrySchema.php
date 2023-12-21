@@ -35,7 +35,7 @@ class CountrySchema extends Schema
         return [
             ID::make(),
             Str::make('name')->sortable(),
-            Str::make('flag_url'),
+            Str::make('flagUrl'),
             HasMany::make('sites'),
             DateTime::make('createdAt')->sortable()->readOnly(),
             DateTime::make('updatedAt')->sortable()->readOnly(),
