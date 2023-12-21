@@ -53,8 +53,8 @@ class Server extends BaseServer
      *
      * @return bool
      */
-    public function authorizable(): bool
-    {
-        return false;
-    }
+    // public function authorizable(): bool
+    // {
+    //     return false;
+    // }
 }

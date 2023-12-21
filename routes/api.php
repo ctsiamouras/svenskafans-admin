@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApiAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use LaravelJsonApi\Laravel\Facades\JsonApiRoute;
@@ -21,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-JsonApiRoute::server('v1')->prefix('v1')->resources(function (ResourceRegistrar $server) {
+JsonApiRoute::server('v1')->prefix('v1')->middleware(ApiAuthentication::class)->resources(function (ResourceRegistrar $server) {
     $server->resource('countries', JsonApiController::class)
         ->relationships(function ($relations) {
             $relations->hasMany('sites');
