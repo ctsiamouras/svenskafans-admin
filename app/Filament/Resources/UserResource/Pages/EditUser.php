@@ -13,4 +13,13 @@ class EditUser extends EditRecord
     {
         return [];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (!$data['password']) {
+            unset($data['password']);
+        }
+
+        return $data;
+    }
 }

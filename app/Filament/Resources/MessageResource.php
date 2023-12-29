@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Constants\PaginationConstants;
-use App\Filament\Constants\TranslationPathConstants;
+use App\Constants\PaginationConstants;
+use App\Constants\TranslationPathConstants;
 use App\Filament\Resources\MessageResource\Pages;
 use App\Models\Message;
 use App\Models\Team;

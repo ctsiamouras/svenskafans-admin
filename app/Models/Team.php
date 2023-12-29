@@ -10,15 +10,6 @@ class Team extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        //
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -34,6 +25,28 @@ class Team extends Model
         'ms_message',
         'players_team_image_id',
         'map_players',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'date:Y-m-d H:i',
+        'updated_at' => 'date:Y-m-d H:i',
+        'deleted_at' => 'date:Y-m-d H:i',
+    ];
+
+    /**
+     * The attributes that are hidden.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -64,5 +77,35 @@ class Team extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_team', 'team_id', 'user_id');
+    }
+
+    /**
+     * One to Many association for Images
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'team_id', 'id');
+    }
+
+    /**
+     * One to Many association for Polls
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function polls()
+    {
+        return $this->hasMany(Poll::class, 'team_id', 'id');
+    }
+
+    /**
+     * One to Many association for Articles
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'team_id', 'id');
     }
 }

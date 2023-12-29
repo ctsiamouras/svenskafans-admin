@@ -7,15 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class League extends Model
 {
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        //
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -30,6 +21,16 @@ class League extends Model
         'live_score_sort_order',
         'collection_page_intro_text',
         'resource_version',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'date:Y-m-d H:i',
+        'updated_at' => 'date:Y-m-d H:i',
     ];
 
     /**

@@ -2,14 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Constants\PaginationConstants;
-use App\Filament\Constants\TranslationPathConstants;
+use App\Constants\PaginationConstants;
+use App\Constants\TranslationPathConstants;
 use App\Filament\Resources\SiteResource\Pages;
 use App\Models\Country;
 use App\Models\Site;
 use App\Models\Sport;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -49,35 +50,30 @@ class SiteResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.name'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.name')),
                 TextInput::make('title')
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.title'))
-                    ->required(),
+                    ->suffix('| SwedishFans.com')
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.title')),
                 Textarea::make('meta_description')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.meta_description'))
-                    ->rows(4)
-                    ->required(),
+                    ->rows(4),
                 TextInput::make('url')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.url'))
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 Select::make('country_id')
+                    ->searchable()
                     ->options(self::countryOptions())
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.country'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.country')),
                 Select::make('sport_id')
                     ->options(self::sportOptions())
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.sport'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.sport')),
                 ColorPicker::make('text_color')
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.text_color'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.text_color')),
                 ColorPicker::make('header_color')
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.header_color'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.header_color')),
                 ColorPicker::make('menu_color')
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.menu_color'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.menu_color')),
                 Checkbox::make('show_in_lists')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.show_in_lists'))
                     ->columnStart(1),
@@ -89,6 +85,11 @@ class SiteResource extends Resource
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.show_in_left_menu')),
                 Checkbox::make('league_leaps_over_two_years')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'sites.form.league_leaps_over_two_years')),
+                Hidden::make('sort_order')
+                    ->default(function () {
+                        $maxOrderValue = Site::max('sort_order');
+                        return $maxOrderValue + 1;
+                    }),
             ]);
     }
 
@@ -167,10 +168,10 @@ class SiteResource extends Resource
     }
 
     private static function countryOptions(): array {
-        return Country::all()->pluck('name', 'id')->toArray();
+        return Country::orderBy('name')->get()->pluck('name', 'id')->toArray();
     }
 
     private static function sportOptions(): array {
-        return Sport::all()->pluck('name', 'id')->toArray();
+        return Sport::orderBy('name')->get()->pluck('name', 'id')->toArray();
     }
 }

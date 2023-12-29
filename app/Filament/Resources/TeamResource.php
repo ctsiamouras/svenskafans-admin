@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Constants\PaginationConstants;
-use App\Filament\Constants\TranslationPathConstants;
+use App\Constants\PaginationConstants;
+use App\Constants\TranslationPathConstants;
 use App\Filament\Resources\TeamResource\Pages;
 use App\Models\League;
 use App\Models\Site;
@@ -52,10 +52,10 @@ class TeamResource extends Resource
                     ->required(),
                 Select::make('league_id')
                     ->options(self::leagueOptions())
-                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.league'))
-                    ->required(),
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.league')),
                 TextInput::make('name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.name'))
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 TextInput::make('long_name')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'teams.form.long_name')),

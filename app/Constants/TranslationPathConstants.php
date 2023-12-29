@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Constants;
+namespace App\Constants;
 
 class TranslationPathConstants
 {

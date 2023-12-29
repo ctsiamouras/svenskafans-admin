@@ -7,15 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        //
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -23,6 +14,16 @@ class Country extends Model
     protected $fillable = [
         'name',
         'flag_url',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'date:Y-m-d H:i',
+        'updated_at' => 'date:Y-m-d H:i',
     ];
 
     /**

@@ -47,6 +47,18 @@ class User extends Authenticatable implements HasName
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'password' => 'hashed',
+        'created_at' => 'date:Y-m-d H:i',
+        'updated_at' => 'date:Y-m-d H:i',
+        'deleted_at' => 'date:Y-m-d H:i',
+    ];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
@@ -57,15 +69,9 @@ class User extends Authenticatable implements HasName
         'last_login',
         'last_password_change',
         'failed_login',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'password' => 'hashed',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function getFilamentName(): string
@@ -91,5 +97,25 @@ class User extends Authenticatable implements HasName
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'user_team');
+    }
+
+    /**
+     * One to Many association for Images
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'user_id', 'id');
+    }
+
+    /**
+     * One to Many association for Articles
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'user_id', 'id');
     }
 }

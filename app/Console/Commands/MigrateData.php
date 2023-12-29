@@ -65,6 +65,10 @@ class MigrateData extends Command
 
     public const NULL_COLUMNS_TO_IGNORE_RECORD = [
         self::TABLE_ADMIN_USER => ['Password'],
+        self::TABLE_SPORT => ['SportName'],
+        self::TABLE_COUNTRY => ['CountryName'],
+        self::TABLE_LEAGUE => ['LeagueName'],
+        self::TABLE_TEAM => ['TeamName'],
     ];
 
     public const DEFAULT_VALUES_ON_NULL_PER_COLUMN = [
@@ -309,7 +313,9 @@ class MigrateData extends Command
                                 }
 
                                 // ignore record when specific column has NULL value
-                                if (isset(self::NULL_COLUMNS_TO_IGNORE_RECORD[$productionTable]) && in_array($productionColumn, self::NULL_COLUMNS_TO_IGNORE_RECORD[$productionTable]) && $value === null) {
+                                if (isset(self::NULL_COLUMNS_TO_IGNORE_RECORD[$productionTable])
+                                    && in_array($productionColumn, self::NULL_COLUMNS_TO_IGNORE_RECORD[$productionTable])
+                                    && !$value) {
                                     $data = [];
 
                                     break;

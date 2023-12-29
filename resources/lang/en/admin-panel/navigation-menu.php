@@ -13,6 +13,7 @@ return [
             'sites' => 'Sites',
             'teams' => 'Teams',
             'users' => 'Users',
+            'leagues' => 'Leagues',
         ],
 
 ];

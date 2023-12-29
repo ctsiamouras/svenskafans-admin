@@ -1,6 +1,6 @@
 <?php
 
-use App\Filament\Constants\UserRoleConstants;
+use App\Constants\UserRoleConstants;
 
 return [
 
@@ -15,7 +15,8 @@ return [
     'phone' => 'Telefon',
     'email' => 'Email',
     'twitter_name' => 'Twitternamn',
-    'user_role' => 'Tillhörande lagsida',
+    'user_role' => 'Användarroll',
+    'teams' => 'Lag',
 
     'user_roles' => [
         UserRoleConstants::SUPER_ADMIN => 'Super admin',

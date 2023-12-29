@@ -9,7 +9,9 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Js;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentAsset;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -21,11 +23,19 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        FilamentAsset::register([
+            Js::make('admin-panel', asset('/js/filament/filament/admin-panel.js')),
+        ]);
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->spa()
             ->default()
+            ->favicon(asset('images/favicon.ico'))
             ->id('admin')
             ->path('admin')
             ->login(Login::class)

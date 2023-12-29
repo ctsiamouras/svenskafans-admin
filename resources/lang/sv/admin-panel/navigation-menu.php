@@ -13,6 +13,7 @@ return [
         'sites' => 'Sajter',
         'teams' => 'Lag',
         'users' => 'Användare',
+        'leagues' => 'Ligor',
     ],
 
 ];

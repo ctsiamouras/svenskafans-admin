@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('leagues', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150)->index();
+            $table->string('name', 150)->unique()->index();
             $table->unsignedBigInteger('site_id')->nullable()->index();
-            $table->unsignedBigInteger('tournament_id')->nullable()->index();
+//            $table->unsignedBigInteger('tournament_id')->nullable()->index();
             $table->boolean('show_in_mobile')->default(true);
             $table->string('table_dividers', 50)->nullable();
             $table->string('url')->unique()->nullable();
@@ -24,8 +24,14 @@ return new class extends Migration
             $table->integer('resource_version')->default(0);
             $table->timestamps();
 
-            $table->foreign('site_id')->references('id')->on('sites')->nullOnDelete();
-//            $table->foreign('tournament_id')->references('id')->on('tournaments')->nullOnDelete();
+            $table->foreign('site_id')
+                ->references('id')
+                ->on('sites')
+                ->nullOnDelete();
+//            $table->foreign('tournament_id')
+//                ->references('id')
+//                ->on('tournaments')
+//                ->nullOnDelete();
         });
     }
 

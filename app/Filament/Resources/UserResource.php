@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Constants\PaginationConstants;
-use App\Filament\Constants\TranslationPathConstants;
-use App\Filament\Resources\UserResource\Pages;
+use App\Constants\PaginationConstants;
+use App\Constants\TranslationPathConstants;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\Site;
 use App\Models\Team;
 use App\Models\User;
@@ -19,7 +20,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Validation\Rules\Unique;
 
 class UserResource extends Resource
 {
@@ -59,13 +59,14 @@ class UserResource extends Resource
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.nickname')),
                 TextInput::make('username')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.username'))
-//                    ->unique(ignoreRecord: true)
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 TextInput::make('password')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.password'))
-                    ->hiddenOn(EditUser::class)
-                    ->password()
-                    ->required(),
+                    ->required(function (string $operation) {
+                        return $operation === 'create';
+                    })
+                    ->password(),
                 TextInput::make('phone')
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.phone')),
                 TextInput::make('email')
@@ -79,6 +80,10 @@ class UserResource extends Resource
                     ->options(self::userRoleOptions())
                     ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.user_role'))
                     ->required(),
+                Select::make('teams')
+                    ->label(__(TranslationPathConstants::ADMINISTRATION_TRANSLATION_PATH . 'users.teams'))
+                    ->multiple()
+                    ->relationship('teams', 'name'),
             ]);
     }
 
@@ -159,9 +164,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 

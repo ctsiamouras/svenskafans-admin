@@ -7,21 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Sport extends Model
 {
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        //
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'name',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'date:Y-m-d H:i',
+        'updated_at' => 'date:Y-m-d H:i',
     ];
 
     /**
