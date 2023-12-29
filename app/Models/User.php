@@ -31,7 +31,7 @@ class User extends Authenticatable implements HasName
         'email',
         'nickname',
         'username',
-        'password',
+        'password', // TODO: We should remove the password from mass assignments for security reasons
         'phone',
         'last_login',
         'last_password_change',
