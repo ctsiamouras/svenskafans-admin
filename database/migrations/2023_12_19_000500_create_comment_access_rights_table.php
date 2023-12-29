@@ -15,40 +15,40 @@ return new class extends Migration
     {
         Schema::create('comment_access_rights', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
+            $table->string('name', 50)->unique();
             $table->timestamps();
             $table->softDeletes();
         });
 
         // Insert admin user roles
         $today = Carbon::now();
-        DB::table('poll_types')->insert([
+        DB::table('comment_access_rights')->insert([
             [
-                'id' => 0,
+                'id' => 1,
                 'name' => 'not_active',
                 'created_at' => $today,
                 'updated_at' => $today,
             ],
             [
-                'id' => 1,
+                'id' => 2,
                 'name' => 'active',
                 'created_at' => $today,
                 'updated_at' => $today,
             ],
             [
-                'id' => 2,
+                'id' => 3,
                 'name' => 'active_but_locked',
                 'created_at' => $today,
                 'updated_at' => $today,
             ],
             [
-                'id' => 3,
+                'id' => 4,
                 'name' => 'active_for_members',
                 'created_at' => $today,
                 'updated_at' => $today,
             ],
             [
-                'id' => 4,
+                'id' => 5,
                 'name' => 'active_for_team_members',
                 'created_at' => $today,
                 'updated_at' => $today,
