@@ -34,6 +34,7 @@ return new class extends Migration
             $table->foreign('league_id')
                 ->references('id')
                 ->on('leagues')
+                ->cascadeOnUpdate()
                 ->nullOnDelete();
 
 //            $table->foreign('players_team_image_id')

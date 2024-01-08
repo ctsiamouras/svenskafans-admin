@@ -14,7 +14,6 @@ class League extends Model
     protected $fillable = [
         'name',
         'site_id',
-        'tournament_id',
         'show_in_mobile',
         'table_dividers',
         'url',

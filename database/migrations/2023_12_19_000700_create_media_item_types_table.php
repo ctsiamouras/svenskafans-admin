@@ -20,7 +20,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        // Insert admin user roles
+        // Insert media item types
         $today = Carbon::now();
         DB::table('media_item_types')->insert([
             [

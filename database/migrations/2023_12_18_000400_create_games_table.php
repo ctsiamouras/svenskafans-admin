@@ -39,14 +39,19 @@ return new class extends Migration
             $table->foreign('team_home_id')
                 ->references('id')
                 ->on('teams')
+                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->foreign('team_away_id')
                 ->references('id')
                 ->on('teams')
+                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->foreign('game_type_id')
                 ->references('id')
                 ->on('game_types');
+
             $table->foreign('game_status_id')
                 ->references('id')
                 ->on('game_statuses');

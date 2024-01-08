@@ -18,7 +18,7 @@ return new class extends Migration
 //            $table->unsignedBigInteger('tournament_id')->nullable()->index();
             $table->boolean('show_in_mobile')->default(true);
             $table->string('table_dividers', 50)->nullable();
-            $table->string('url')->unique()->nullable();
+            $table->string('url')->nullable();
             $table->integer('live_score_sort_order');
             $table->text('collection_page_intro_text')->nullable();
             $table->integer('resource_version')->default(0);

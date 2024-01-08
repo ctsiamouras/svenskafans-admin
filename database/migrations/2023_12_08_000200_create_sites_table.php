@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150)->nullable()->index();
-            $table->string('url')->unique()->index();
+            $table->string('name', 150)->unique()->nullable()->index();
+            $table->string('url')->index();
             $table->boolean('show_in_lists')->default(false);
             $table->string('menu_color', 50)->nullable();
             $table->string('header_color', 50)->nullable();

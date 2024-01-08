@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('site_id')->nullable()->index();
             $table->string('name', 100)->unique();
-            $table->string('url')->unique();
+            $table->string('url');
             $table->boolean('is_active')->default(false);
             $table->text('page_intro_text')->nullable();
             $table->timestamps();

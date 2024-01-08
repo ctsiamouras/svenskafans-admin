@@ -18,27 +18,30 @@ return new class extends Migration
             $table->integer('height')->nullable();
             $table->string('header', 500)->nullable();
             $table->string('description', 5000)->nullable();
-            $table->unsignedBigInteger('site_id')->nullable();
-            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('site_id')->nullable()->index();
+            $table->unsignedBigInteger('team_id')->nullable()->index();
 //            $table->integer('image_type_id')->nullable();
             $table->string('rights_text', 500)->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('site_id')
                 ->references('id')
                 ->on('sites')
+                ->cascadeOnUpdate()
                 ->nullOnDelete();
 
             $table->foreign('team_id')
                 ->references('id')
                 ->on('teams')
+                ->cascadeOnUpdate()
                 ->nullOnDelete();
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->cascadeOnUpdate()
                 ->nullOnDelete();
         });
     }
